@@ -11,18 +11,20 @@ export class ConfigService {
     this.databases = new TablesDB(this.client);
   }
 
-  async createRow(title,description,isComplete) {
+  async createRow(title, description, isComplete) {
     try {
       const row = await this.databases.createRow({
-        databaseId:conf.databaseid,
+        databaseId: conf.databaseid,
         tableId: conf.tableid,
         rowID: ID.unique(),
-        title,
-        description,
-        isComplete
+        data: {
+          title,
+          description,
+          isComplete,
+        },
       });
-      if(row){
-        return row
+      if (row) {
+        return row;
       } else {
         console.log("Row creation failed");
       }
@@ -31,11 +33,11 @@ export class ConfigService {
       throw error;
     }
   }
-    async getRows() {
+  async getRows() {
     try {
       const rows = await this.databases.listRows({
         databaseId: conf.databaseid,
-        tableId: conf.tableid
+        tableId: conf.tableid,
       });
       if (rows) {
         return rows;
@@ -48,3 +50,7 @@ export class ConfigService {
     }
   }
 }
+
+const configService = new ConfigService();
+
+export default configService;
