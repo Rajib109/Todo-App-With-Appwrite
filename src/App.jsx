@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { login } from '../store/authSlice'; // Import your login action
-import authService from '../appwrite/auth'; // Import your service
+import { login, logout } from './store/authSlice'; // Import your login action
+import authService from './appwrite/auth'; // Import your service
 
 const LoginPage = () => {
     const dispatch = useDispatch();
@@ -26,6 +26,7 @@ const LoginPage = () => {
                 if (userData) {
                     // 3. Dispatch your synchronous action
                     dispatch(login(userData));
+                    console.log(userData)
                 } else {
                     setError("Failed to get user data after login.");
                 }
@@ -52,6 +53,7 @@ const LoginPage = () => {
                 {error && <p style={{color: 'red'}}>{error}</p>}
             </form>
             {/* Add signup form here */}
+            <button onClick={()=>logout()}>logout</button>
         </div>
     );
 };

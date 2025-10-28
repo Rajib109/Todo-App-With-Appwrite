@@ -10,32 +10,32 @@ export class AuthService {
         this.client
             .setEndpoint(conf.appwriteurl)
             .setProject(conf.projectid);
-            this.account = new Account(this.client);
+        this.account = new Account(this.client);
     }
 
     async createAccount(email, password, name) {
-       try {
-         const user = await this.account.create({
-             userId: ID.unique(),
-             email,
-             password,
-             name
-         });
-         if(user){
-            return await this.login(email, password);
-         }
-         else{
+        try {
+            const user = await this.account.create({
+                userId: ID.unique(),
+                email,
+                password,
+                name
+            });
+            if (user) {
+                return await this.login(email, password);
+            }
+            else {
                 console.log('Account creation failed');
-         }
-       } catch (error) {
-        console.error('Error creating account: in createAccount()::', error);
-        throw error;
-       }
+            }
+        } catch (error) {
+            console.error('Error creating account: in createAccount()::', error);
+            throw error;
+        }
     }
 
     async login(email, password) {
         try {
-            const session = await this.account.createEmailSession(email, password);
+            const session = await this.account.createEmailPasswordSession({ email, password });
             if (session) {
                 return session;
             } else {
@@ -62,7 +62,7 @@ export class AuthService {
     }
     async logout() {
         try {
-            const response = await this.account.deleteSession('current');
+            const response = await this.account.deleteSessions();
             if (response) {
                 console.log('Logout successful:', response);
             } else {
