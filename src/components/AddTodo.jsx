@@ -1,52 +1,32 @@
 import { useState } from "react";
-import api from "../api/axios";
+import { useDispatch } from "react-redux";
+import { addTodo } from "../store/todoSlice.js";
 
-function AddTodo({ fetchTodos, filter, search, page, sort, order }) {
-  const [text, setText] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+function AddTodo() {
+  const [input, setInput] = useState("");
+  const dispatch = useDispatch();
 
-  const handleSubmit = async (e) => {
+  const addTodoHandler = (e) => {
     e.preventDefault();
-    if (!text.trim()) {
-      setError("Todo text is required");
-      return;
-    }
-
-    try {
-      setLoading(true);
-      setError("");
-
-      await api.post("/todos", { text });
-      setText(""); // clear input
-      fetchTodos(filter, search, page, sort, order); // refetch todos
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to add todo");
-    } finally {
-      setLoading(false);
-    }
+    dispatch(addTodo(input));
+    setInput("");
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-2 mb-4">
-      <div className="flex gap-2">
-        <input
-          type="text"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="Add a new todo"
-          className="flex-1 p-2 border rounded-sm"
-        />
-        <button
-          type="submit"
-          disabled={loading}
-          className="px-4 py-2 bg-blue-500 text-white rounded-sm disabled:opacity-50"
-        >
-          {loading ? "Adding..." : "Add"}
-        </button>
-      </div>
-
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+    <form onSubmit={addTodoHandler} className="space-x-3 mt-12">
+      <input
+        type="text"
+        className="bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+        placeholder="Enter a Todo..."
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      />
+      <button
+        type="submit"
+        className="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
+      >
+        Add Todo
+      </button>
     </form>
   );
 }
