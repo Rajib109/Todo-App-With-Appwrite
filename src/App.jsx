@@ -1,5 +1,6 @@
 import AddTodo from "./components/AddTodo";
 import Todos from "./components/Todos";
+import Login from "./components/Login";
 
 function App() {
   return (
@@ -7,6 +8,7 @@ function App() {
       <h1 className="text-2xl font-bold mb-4">Manage Your Todos</h1>
       <AddTodo />
       <Todos />
+      <Login />
     </div>
   );
 }
