@@ -8,7 +8,6 @@ function App() {
       <h1 className="text-2xl font-bold mb-4">Manage Your Todos</h1>
       <AddTodo />
       <Todos />
-      <Login />
     </div>
   );
 }
